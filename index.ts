@@ -1,18 +1,27 @@
+// En el archivo 'index.ts'
+
 import { Biblioteca } from "./clases/Biblioteca";
 const biblioteca = new Biblioteca();
+
+// ... (El código de agregar libros y socios se mantiene igual)
 
 biblioteca.agregarLibro("1984", "George Orwell", "1234567890");
 biblioteca.agregarLibro("Cien Años de Soledad", "Gabriel García Márquez", "0987654321");
 biblioteca.agregarLibro("Don Quijote de la Mancha", "Miguel de Cervantes", "1122334455");
-biblioteca.agregarLibro("La Sombra del Viento", "Carlos Ruiz Zafón", "6677889900");
-biblioteca.agregarLibro("El Amor en los Tiempos del Cólera", "Gabriel García Márquez", "5544332211");
 
 biblioteca.registrarSocio("19224", "Enzo", "Pitana");
 biblioteca.registrarSocio("29384", "Ana", "García");
 biblioteca.registrarSocio("38475", "Luis", "Martínez");
 
-console.log("Libros en la biblioteca:");
-console.log(biblioteca['inventario']); // Muestra el array de libros
-console.log("Socios registrados:");
-console.log(biblioteca['socios']); // Muestra el array de socios
-console.log("¡Biblioteca creada y lista para usar!");
+// Simulación de un préstamo
+console.log("\n--- Préstamo ---");
+biblioteca.prestarLibro("1234567890", "19224"); // Enzo toma "1984"
+
+// Intentar prestar el mismo libro a otro socio (debe reservarlo)
+console.log("\n--- Intento de Préstamo con Reserva ---");
+biblioteca.prestarLibro("1234567890", "29384"); // Ana intenta tomar "1984"
+biblioteca.prestarLibro("1234567890", "38475"); // Luis intenta tomar "1984"
+
+// Simulación de una devolución
+console.log("\n--- Devolución ---");
+biblioteca.devolverLibro("1234567890", "19224"); // Enzo devuelve "1984"
