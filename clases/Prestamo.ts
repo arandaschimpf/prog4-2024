@@ -1,8 +1,8 @@
-// En el archivo Prestamo.ts
+// Archivo: Prestamo.ts
 import { Libro } from "./Libro";
 
 /**
- * Representa un préstamo de un libro a un socio.
+ * Representa cada préstamo individual
  */
 export class Prestamo {
   constructor(public libro: Libro, public vencimiento: Date) {}
