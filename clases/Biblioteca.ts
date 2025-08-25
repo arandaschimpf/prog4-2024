@@ -1,20 +1,21 @@
-// En el archivo Biblioteca.ts
+// Archivo: Biblioteca.ts
 import { Libro } from "./Libro";
 import { Socio } from "./Socio";
 import { Autor } from "./Autor";
 import { EventoBiblioteca } from "./EventoBiblioteca";
 
 /**
- * Representa una biblioteca que gestiona libros, socios, autores y eventos.
+ * Esta es la clase principal que maneja toda la biblioteca
+ * Aquí controlamos libros, socios, autores y eventos
  */
 export class Biblioteca {
   private inventario: Libro[] = [];
   private socios: Socio[] = [];
   private autores: Autor[] = [];
   private eventos: EventoBiblioteca[] = [];
-  private DURACION = 14;
+  private DURACION = 14; // Los libros se prestan por 2 semanas
 
-  // --- Métodos de gestión de autores ---
+  // Funciones para manejar autores
   agregarAutor(nombre: string, biografia: string, anoNacimiento: number): Autor {
     const autorCreado = new Autor(nombre, biografia, anoNacimiento);
     this.autores.push(autorCreado);
@@ -25,7 +26,7 @@ export class Biblioteca {
     return this.autores.find(autor => autor.nombre === nombre);
   }
 
-  // --- Métodos de gestión de libros ---
+  // Todo lo relacionado con los libros
   agregarLibro(titulo: string, autor: Autor, isbn: string): Libro {
     const libroCreado = new Libro(titulo, autor, isbn);
     this.inventario.push(libroCreado);
@@ -44,7 +45,7 @@ export class Biblioteca {
     return this.inventario.filter(libro => libro.autor.nombre === nombreAutor);
   }
 
-  // --- Métodos de gestión de socios ---
+  // Para registrar y buscar socios
   registrarSocio(id: number, nombre: string, apellido: string): Socio {
     const socioCreado = new Socio(id, nombre, apellido);
     this.socios.push(socioCreado);
@@ -55,7 +56,7 @@ export class Biblioteca {
     return this.socios.find((socio) => socio.id === id);
   }
 
-  // --- Métodos de gestión de eventos ---
+  // Organizamos eventos para la comunidad
   crearEvento(nombre: string, fecha: Date, descripcion: string): EventoBiblioteca {
     const nuevoEvento = new EventoBiblioteca(nombre, fecha, descripcion);
     this.eventos.push(nuevoEvento);
@@ -70,45 +71,45 @@ export class Biblioteca {
     const socio = this.buscarSocio(socioId);
     const evento = this.buscarEvento(eventoNombre);
 
-    if (!socio) throw new Error("Socio no encontrado.");
-    if (!evento) throw new Error("Evento no encontrado.");
+    if (!socio) throw new Error("No pudimos encontrar ese socio");
+    if (!evento) throw new Error("El evento no existe");
 
     evento.agregarParticipante(socio);
   }
 
-  // --- Operaciones de préstamos y reservas ---
+  // El corazón del sistema: préstamos y devoluciones
   retirarLibro(socioId: number, libroISBN: string): void {
     const socio = this.buscarSocio(socioId);
     const libro = this.buscarLibro(libroISBN);
 
-    if (!socio) throw new Error("Socio no encontrado.");
-    if (!libro) throw new Error("Libro no encontrado.");
+    if (!socio) throw new Error("No encontramos ese socio en nuestro sistema");
+    if (!libro) throw new Error("Ese libro no está en nuestro catálogo");
 
     if (socio.deuda > 0) {
-      throw new Error(`❌ Error: ${socio.nombreCompleto} tiene una deuda pendiente de $${socio.deuda} y no puede retirar libros.`);
+      throw new Error(`Lo siento ${socio.nombreCompleto}, pero tenés una deuda de $${socio.deuda} pendiente. Primero necesitás saldarla para poder llevarte libros.`);
     }
 
     if (this.libroEstaPrestado(libro)) {
-      throw new Error(`El libro "${libro.titulo}" no está disponible para préstamo.`);
+      throw new Error(`"${libro.titulo}" ya está prestado, pero podés reservarlo si querés`);
     }
 
     socio.retirar(libro, this.DURACION);
-    console.log(`✅ Préstamo exitoso: ${socio.nombreCompleto} ha retirado "${libro.titulo}".`);
+    console.log(`¡Perfecto! ${socio.nombreCompleto} se llevó "${libro.titulo}". Recordá devolverlo antes del vencimiento.`);
   }
 
   devolverLibro(socioId: number, libroISBN: string): void {
     const socio = this.buscarSocio(socioId);
     const libro = this.buscarLibro(libroISBN);
 
-    if (!socio) throw new Error("Socio no encontrado.");
-    if (!libro) throw new Error("Libro no encontrado.");
+    if (!socio) throw new Error("No encontramos ese socio");
+    if (!libro) throw new Error("Ese libro no existe");
 
     socio.devolver(libro);
-    console.log(`✅ Devolución exitosa: ${socio.nombreCompleto} ha devuelto "${libro.titulo}".`);
+    console.log(`¡Gracias ${socio.nombreCompleto}! Ya recibimos "${libro.titulo}" de vuelta.`);
 
     const siguienteSocio = libro.quitarPrimeraReserva();
     if (siguienteSocio) {
-      console.log(`🔔 Notificación: ¡El libro "${libro.titulo}" ya está disponible para ${siguienteSocio.nombreCompleto}!`);
+      console.log(`¡Buenas noticias! ${siguienteSocio.nombreCompleto}, el libro "${libro.titulo}" que reservaste ya está disponible. Podés pasar a buscarlo cuando quieras.`);
     }
   }
 
@@ -116,28 +117,28 @@ export class Biblioteca {
     const socio = this.buscarSocio(socioId);
     const libro = this.buscarLibro(libroISBN);
 
-    if (!socio) throw new Error("Socio no encontrado.");
-    if (!libro) throw new Error("Libro no encontrado.");
+    if (!socio) throw new Error("No encontramos ese socio");
+    if (!libro) throw new Error("Ese libro no existe");
 
     if (this.libroEstaPrestado(libro)) {
       libro.agregarReserva(socio);
-      console.log(`✅ Reserva exitosa: ${socio.nombreCompleto} ha reservado "${libro.titulo}".`);
+      console.log(`Listo ${socio.nombreCompleto}, reservamos "${libro.titulo}" para vos. Te avisamos cuando esté disponible.`);
     } else {
-      console.log(`ℹ️ El libro "${libro.titulo}" está disponible. No es necesario reservarlo.`);
+      console.log(`¡Qué suerte! "${libro.titulo}" está disponible ahora mismo. No hace falta que lo reserves, podés llevártelo directamente.`);
     }
   }
 
-  // --- Método de recomendación ---
+  // Sistema de recomendaciones personalizado
   sugerirLibros(socioId: number): Libro[] {
     const socio = this.buscarSocio(socioId);
     if (!socio) {
-      console.log("❌ Socio no encontrado para recomendaciones.");
+      console.log("No encontramos ese socio para hacerle recomendaciones");
       return [];
     }
 
     const historial = socio.historialLectura;
     if (historial.length === 0) {
-      console.log("ℹ️ No hay historial de lectura para hacer recomendaciones.");
+      console.log("Todavía no leíste nada con nosotros, así que no podemos recomendarte libros aún");
       return [];
     }
 
@@ -157,7 +158,7 @@ export class Biblioteca {
     return recomendaciones;
   }
 
-  /** Verifica si el libro está prestado a cualquier socio. */
+  // Función auxiliar para verificar disponibilidad
   private libroEstaPrestado(libro: Libro): boolean {
     return this.socios.some(socio => socio.tienePrestadoLibro(libro));
   }
