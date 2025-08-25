@@ -1,9 +1,9 @@
-// En el archivo Libro.ts
+// Archivo: Libro.ts
 import { Socio } from "./Socio";
 import { Autor } from "./Autor";
 
 /**
- * Representa un libro en la biblioteca con sus propiedades, gestión de reservas y autor como objeto.
+ * Cada libro tiene sus datos básicos y maneja sus propias reservas
  */
 export class Libro {
   private _reservas: Socio[] = [];
@@ -17,21 +17,16 @@ export class Libro {
   get titulo(): string { return this._titulo; }
   get autor(): Autor { return this._autor; }
   get isbn(): string { return this._isbn; }
-
   get reservas(): Socio[] { return this._reservas; }
 
-  /**
-   * Agrega un socio a la cola de reservas.
-   */
+  // Alguien reserva este libro
   agregarReserva(socio: Socio): void {
     if (!this._reservas.includes(socio)) {
       this._reservas.push(socio);
     }
   }
 
-  /**
-   * Quita y retorna el primer socio de la cola de reservas.
-   */
+  // Cuando el libro se libera, le toca al próximo en la fila
   quitarPrimeraReserva(): Socio | undefined {
     return this._reservas.shift();
   }
