@@ -1,4 +1,4 @@
-// En el archivo Autor.ts
+// Archivo: Autor.ts
 export class Autor {
   constructor(
     private _nombre: string,
