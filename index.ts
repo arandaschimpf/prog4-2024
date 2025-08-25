@@ -30,7 +30,7 @@ try {
   
   biblioteca.retirarLibro(socio1.id, libro2.isbn); // Intento de préstamo con deuda
 } catch (error: any) {
-  console.log(`❌ Error: ${error.message}`);
+  console.log(`Error: ${error.message}`);
 }
 socio1.saldarDeuda();
 biblioteca.retirarLibro(socio1.id, libro2.isbn); // Préstamo exitoso tras saldar deuda
@@ -41,7 +41,7 @@ try {
   biblioteca.reservarLibro(socio1.id, libro3.isbn);
   biblioteca.devolverLibro(socio2.id, libro3.isbn);
 } catch (error: any) {
-  console.log(`❌ Error: ${error.message}`);
+  console.log(`Error: ${error.message}`);
 }
 
 console.log("\n--- Prueba de Historial y Recomendaciones ---");
@@ -51,7 +51,7 @@ socioLector.devolver(libro3);
 
 const recomendaciones = biblioteca.sugerirLibros(socioLector.id);
 if (recomendaciones.length > 0) {
-  console.log(`✨ Recomendaciones para ${socioLector.nombreCompleto}:`);
+  console.log(`Recomendaciones para ${socioLector.nombreCompleto}:`);
   recomendaciones.forEach(libro => {
     console.log(`- "${libro.titulo}" de ${libro.autor.nombre}`);
   });
