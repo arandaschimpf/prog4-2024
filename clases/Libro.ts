@@ -1,4 +1,3 @@
-// Archivo: Libro.ts
 import { Socio } from "./Socio";
 import { Autor } from "./Autor";
 
@@ -19,14 +18,14 @@ export class Libro {
   get isbn(): string { return this._isbn; }
   get reservas(): Socio[] { return this._reservas; }
 
-  // Alguien reserva este libro
+  // alguien reserva este libro
   agregarReserva(socio: Socio): void {
     if (!this._reservas.includes(socio)) {
       this._reservas.push(socio);
     }
   }
 
-  // Cuando el libro se libera, le toca al próximo en la fila
+  // el libro se libera, le toca al proximo en la fila
   quitarPrimeraReserva(): Socio | undefined {
     return this._reservas.shift();
   }
