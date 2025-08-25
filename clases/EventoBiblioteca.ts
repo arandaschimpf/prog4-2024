@@ -1,8 +1,8 @@
-// En el archivo EventoBiblioteca.ts
+// Archivo: EventoBiblioteca.ts
 import { Socio } from "./Socio";
 
 /**
- * Representa un evento de la biblioteca.
+ * Acá manejamos todos los eventos que organizamos en la biblioteca
  */
 export class EventoBiblioteca {
   private _participantes: Socio[] = [];
@@ -29,25 +29,21 @@ export class EventoBiblioteca {
     return this._participantes;
   }
 
-  /**
-   * Agrega un socio como participante del evento.
-   */
+  // Inscribimos gente a los eventos
   agregarParticipante(socio: Socio): void {
     if (!this._participantes.includes(socio)) {
       this._participantes.push(socio);
-      console.log(`✅ Socio ${socio.nombreCompleto} se ha registrado en el evento "${this.nombre}".`);
+      console.log(`¡Excelente! ${socio.nombreCompleto} ya está anotado/a en "${this.nombre}". ¡Nos vemos ahí!`);
     } else {
-      console.log(`⚠️ El socio ${socio.nombreCompleto} ya está registrado en este evento.`);
+      console.log(`${socio.nombreCompleto} ya está inscrito/a en este evento. ¡No te preocupes, tu lugar está asegurado!`);
     }
   }
 
-  /**
-   * Envía una notificación a todos los participantes.
-   */
+  // Mandamos avisos a todos los participantes
   notificarParticipantes(mensaje: string): void {
-    console.log(`\n📢 Notificación del evento "${this.nombre}":`);
+    console.log(`\nAviso importante sobre "${this.nombre}":`);
     this._participantes.forEach(socio => {
-      console.log(`  -> ¡Hola, ${socio.nombreCompleto}! ${mensaje}`);
+      console.log(`  ${socio.nombreCompleto}: ${mensaje}`);
     });
   }
 }
