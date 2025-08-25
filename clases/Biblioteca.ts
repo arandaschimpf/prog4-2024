@@ -1,21 +1,20 @@
-// Archivo: Biblioteca.ts
 import { Libro } from "./Libro";
 import { Socio } from "./Socio";
 import { Autor } from "./Autor";
 import { EventoBiblioteca } from "./EventoBiblioteca";
 
 /**
- * Esta es la clase principal que maneja toda la biblioteca
- * Aquí controlamos libros, socios, autores y eventos
+ * la clase principal que maneja toda la biblioteca
+ * se controla los libros, socios, autores y eventos
  */
 export class Biblioteca {
   private inventario: Libro[] = [];
   private socios: Socio[] = [];
   private autores: Autor[] = [];
   private eventos: EventoBiblioteca[] = [];
-  private DURACION = 14; // Los libros se prestan por 2 semanas
+  private DURACION = 14; // Los libros se prestan por 2 semanas, se puede cambiar
 
-  // Funciones para manejar autores
+  // funciones para manejar autores
   agregarAutor(nombre: string, biografia: string, anoNacimiento: number): Autor {
     const autorCreado = new Autor(nombre, biografia, anoNacimiento);
     this.autores.push(autorCreado);
@@ -26,7 +25,7 @@ export class Biblioteca {
     return this.autores.find(autor => autor.nombre === nombre);
   }
 
-  // Todo lo relacionado con los libros
+  // relacionado con los libros
   agregarLibro(titulo: string, autor: Autor, isbn: string): Libro {
     const libroCreado = new Libro(titulo, autor, isbn);
     this.inventario.push(libroCreado);
@@ -45,7 +44,7 @@ export class Biblioteca {
     return this.inventario.filter(libro => libro.autor.nombre === nombreAutor);
   }
 
-  // Para registrar y buscar socios
+  // registrar y buscar socios
   registrarSocio(id: number, nombre: string, apellido: string): Socio {
     const socioCreado = new Socio(id, nombre, apellido);
     this.socios.push(socioCreado);
@@ -56,7 +55,7 @@ export class Biblioteca {
     return this.socios.find((socio) => socio.id === id);
   }
 
-  // Organizamos eventos para la comunidad
+  // eventos para la comunidad
   crearEvento(nombre: string, fecha: Date, descripcion: string): EventoBiblioteca {
     const nuevoEvento = new EventoBiblioteca(nombre, fecha, descripcion);
     this.eventos.push(nuevoEvento);
@@ -77,7 +76,7 @@ export class Biblioteca {
     evento.agregarParticipante(socio);
   }
 
-  // El corazón del sistema: préstamos y devoluciones
+  //el corazon de todo, préstamos y devoluciones
   retirarLibro(socioId: number, libroISBN: string): void {
     const socio = this.buscarSocio(socioId);
     const libro = this.buscarLibro(libroISBN);
@@ -86,7 +85,7 @@ export class Biblioteca {
     if (!libro) throw new Error("Ese libro no está en nuestro catálogo");
 
     if (socio.deuda > 0) {
-      throw new Error(`Lo siento ${socio.nombreCompleto}, pero tenés una deuda de $${socio.deuda} pendiente. Primero necesitás saldarla para poder llevarte libros.`);
+      throw new Error(`${socio.nombreCompleto}, tenés una deuda de $${socio.deuda} pendiente. Primero necesitás saldarla para poder llevarte libros`);
     }
 
     if (this.libroEstaPrestado(libro)) {
@@ -94,7 +93,7 @@ export class Biblioteca {
     }
 
     socio.retirar(libro, this.DURACION);
-    console.log(`¡Perfecto! ${socio.nombreCompleto} se llevó "${libro.titulo}". Recordá devolverlo antes del vencimiento.`);
+    console.log(`oka, ${socio.nombreCompleto} se llevó "${libro.titulo}"`);
   }
 
   devolverLibro(socioId: number, libroISBN: string): void {
@@ -105,11 +104,11 @@ export class Biblioteca {
     if (!libro) throw new Error("Ese libro no existe");
 
     socio.devolver(libro);
-    console.log(`¡Gracias ${socio.nombreCompleto}! Ya recibimos "${libro.titulo}" de vuelta.`);
+    console.log(`${socio.nombreCompleto} Ya recibimos "${libro.titulo}" de vuelta.`);
 
     const siguienteSocio = libro.quitarPrimeraReserva();
     if (siguienteSocio) {
-      console.log(`¡Buenas noticias! ${siguienteSocio.nombreCompleto}, el libro "${libro.titulo}" que reservaste ya está disponible. Podés pasar a buscarlo cuando quieras.`);
+      console.log(`${siguienteSocio.nombreCompleto}, el libro "${libro.titulo}" que reservaste ya está disponible`);
     }
   }
 
@@ -122,13 +121,13 @@ export class Biblioteca {
 
     if (this.libroEstaPrestado(libro)) {
       libro.agregarReserva(socio);
-      console.log(`Listo ${socio.nombreCompleto}, reservamos "${libro.titulo}" para vos. Te avisamos cuando esté disponible.`);
+      console.log(`Listo ${socio.nombreCompleto}, reservamos "${libro.titulo}" para vos`);
     } else {
-      console.log(`¡Qué suerte! "${libro.titulo}" está disponible ahora mismo. No hace falta que lo reserves, podés llevártelo directamente.`);
+      console.log(`"${libro.titulo}" está disponible ahora mismo`);
     }
   }
 
-  // Sistema de recomendaciones personalizado
+  // sist de recomendaciones
   sugerirLibros(socioId: number): Libro[] {
     const socio = this.buscarSocio(socioId);
     if (!socio) {
@@ -158,7 +157,7 @@ export class Biblioteca {
     return recomendaciones;
   }
 
-  // Función auxiliar para verificar disponibilidad
+  // una funcion auxiliar para verificar disponibilidad
   private libroEstaPrestado(libro: Libro): boolean {
     return this.socios.some(socio => socio.tienePrestadoLibro(libro));
   }
