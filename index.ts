@@ -1,26 +1,25 @@
-// En el archivo index.ts
 import { Biblioteca } from "./clases/Biblioteca";
 import { Socio } from "./clases/Socio";
 import { Autor } from "./clases/Autor";
 
 const biblioteca = new Biblioteca();
 
-// 1. Crear autores
+//Crear autores
 const autorOrwell = biblioteca.agregarAutor("George Orwell", "Escritor inglés", 1903);
 const autorTolkien = biblioteca.agregarAutor("J.R.R. Tolkien", "Escritor de fantasía", 1892);
 
-// 2. Crear libros
+//Crear libros
 const libro1 = biblioteca.agregarLibro("1984", autorOrwell, "1984");
 const libro2 = biblioteca.agregarLibro("Rebelión en la Granja", autorOrwell, "9876");
 const libro3 = biblioteca.agregarLibro("El señor de los anillos", autorTolkien, "5555");
 const libro4 = biblioteca.agregarLibro("Hábitos Atómicos", autorTolkien, "2345"); // Otro libro de Tolkien para la prueba de recomendación
 
-// 3. Crear socios
+//Crear socios
 const socio1 = biblioteca.registrarSocio(31882, "Lucciano", "Curotto");
 const socio2 = biblioteca.registrarSocio(20321, "Luca", "Giordana");
 const socioLector = biblioteca.registrarSocio(101, "Carlos", "Silva");
 
-// 4. Probar la funcionalidad completa
+//Prueba la funcionalidad completa
 
 console.log("--- Prueba de Préstamos y Multas ---");
 try {
@@ -45,7 +44,7 @@ try {
 }
 
 console.log("\n--- Prueba de Historial y Recomendaciones ---");
-// Simular la lectura de libros de Tolkien
+// Simula la lectura de libros de Tolkien
 socioLector.retirar(libro3, 10);
 socioLector.devolver(libro3);
 
