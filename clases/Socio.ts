@@ -1,9 +1,9 @@
-// En el archivo Socio.ts
+// Archivo: Socio.ts
 import { Libro } from "./Libro";
 import { Prestamo } from "./Prestamo";
 
 /**
- * Representa un socio de la biblioteca.
+ * Cada socio de la biblioteca con su historial y estado
  */
 export class Socio {
   private prestamos: Prestamo[] = [];
@@ -23,22 +23,18 @@ export class Socio {
   get deuda(): number { return this._deuda; }
   get historialLectura(): Libro[] { return this._historialLectura; }
 
-  /**
-   * Registra el préstamo de un libro al socio.
-   */
+  // Cuando se lleva un libro prestado
   retirar(libro: Libro, duracion: number): void {
     const vencimiento = new Date();
     vencimiento.setDate(vencimiento.getDate() + duracion);
     this.prestamos.push(new Prestamo(libro, vencimiento));
   }
 
-  /**
-   * Devuelve un libro y lo quita de la lista de préstamos.
-   */
+  // Cuando devuelve un libro
   devolver(libro: Libro): void {
     const prestamo = this.prestamos.find((p) => p.libro.isbn === libro.isbn);
     if (!prestamo) {
-      throw new Error("El socio no tiene este libro prestado.");
+      throw new Error("Este libro no está en tu lista de préstamos");
     }
 
     const hoy = new Date();
@@ -46,29 +42,25 @@ export class Socio {
       const diasDeRetraso = Math.floor((hoy.getTime() - prestamo.vencimiento.getTime()) / (1000 * 60 * 60 * 24));
       const multa = diasDeRetraso * 50;
       this._deuda += multa;
-      console.log(`⚠️ Libro "${libro.titulo}" devuelto con ${diasDeRetraso} días de retraso. Multa de $${multa}. Deuda total: $${this._deuda}`);
+      console.log(`Ups! "${libro.titulo}" se entregó ${diasDeRetraso} días tarde. Eso suma $${multa} a tu cuenta. Tu deuda total ahora es de $${this._deuda}. ¡La próxima tratá de devolverlo a tiempo!`);
     } else {
-      console.log(`✅ Devolución a tiempo. Sin multa.`);
+      console.log(`¡Perfecto! Lo devolviste a tiempo. Sin multas ni problemas.`);
     }
 
     const indice = this.prestamos.indexOf(prestamo);
     this.prestamos.splice(indice, 1);
     this._historialLectura.push(libro);
-    console.log(`📖 Libro "${libro.titulo}" añadido al historial de lectura de ${this.nombreCompleto}.`);
+    console.log(`"${libro.titulo}" se agregó a tu historial de lectura, ${this.nombreCompleto}. ¡Qué bueno que hayas disfrutado otro libro!`);
   }
 
-  /**
-   * Verifica si el socio tiene un libro prestado y retorna el préstamo si existe.
-   */
+  // Verificamos si tiene prestado un libro específico
   tienePrestadoLibro(libro: Libro): Prestamo | undefined {
     return this.prestamos.find((p) => p.libro.isbn === libro.isbn);
   }
 
-  /**
-   * Paga la deuda del socio.
-   */
+  // Pagar las deudas pendientes
   saldarDeuda(): void {
     this._deuda = 0;
-    console.log(`✅ Deuda de ${this.nombreCompleto} saldada. Deuda actual: $${this._deuda}`);
+    console.log(`¡Genial ${this.nombreCompleto}! Tu deuda está saldada. Ya podés llevarte libros de nuevo sin problemas.`);
   }
 }
