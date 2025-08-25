@@ -1,8 +1,7 @@
-// Archivo: EventoBiblioteca.ts
 import { Socio } from "./Socio";
 
 /**
- * Acá manejamos todos los eventos que organizamos en la biblioteca
+ * se maneja todos los eventos que organizamos en la biblioteca
  */
 export class EventoBiblioteca {
   private _participantes: Socio[] = [];
@@ -33,9 +32,9 @@ export class EventoBiblioteca {
   agregarParticipante(socio: Socio): void {
     if (!this._participantes.includes(socio)) {
       this._participantes.push(socio);
-      console.log(`¡Excelente! ${socio.nombreCompleto} ya está anotado/a en "${this.nombre}". ¡Nos vemos ahí!`);
+      console.log(`${socio.nombreCompleto} ya esta anotado/a en "${this.nombre}"`);
     } else {
-      console.log(`${socio.nombreCompleto} ya está inscrito/a en este evento. ¡No te preocupes, tu lugar está asegurado!`);
+      console.log(`${socio.nombreCompleto} ya está inscrito/a en este evento`);
     }
   }
 
