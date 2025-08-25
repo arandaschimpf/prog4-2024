@@ -1,27 +1,60 @@
-// En el archivo 'index.ts'
-
+// En el archivo index.ts
 import { Biblioteca } from "./clases/Biblioteca";
+import { Socio } from "./clases/Socio";
+import { Autor } from "./clases/Autor";
+
 const biblioteca = new Biblioteca();
 
-// ... (El código de agregar libros y socios se mantiene igual)
+// 1. Crear autores
+const autorOrwell = biblioteca.agregarAutor("George Orwell", "Escritor inglés", 1903);
+const autorTolkien = biblioteca.agregarAutor("J.R.R. Tolkien", "Escritor de fantasía", 1892);
 
-biblioteca.agregarLibro("1984", "George Orwell", "1234567890");
-biblioteca.agregarLibro("Cien Años de Soledad", "Gabriel García Márquez", "0987654321");
-biblioteca.agregarLibro("Don Quijote de la Mancha", "Miguel de Cervantes", "1122334455");
+// 2. Crear libros
+const libro1 = biblioteca.agregarLibro("1984", autorOrwell, "1984");
+const libro2 = biblioteca.agregarLibro("Rebelión en la Granja", autorOrwell, "9876");
+const libro3 = biblioteca.agregarLibro("El señor de los anillos", autorTolkien, "5555");
+const libro4 = biblioteca.agregarLibro("Hábitos Atómicos", autorTolkien, "2345"); // Otro libro de Tolkien para la prueba de recomendación
 
-biblioteca.registrarSocio("19224", "Enzo", "Pitana");
-biblioteca.registrarSocio("29384", "Ana", "García");
-biblioteca.registrarSocio("38475", "Luis", "Martínez");
+// 3. Crear socios
+const socio1 = biblioteca.registrarSocio(31882, "Lucciano", "Curotto");
+const socio2 = biblioteca.registrarSocio(20321, "Luca", "Giordana");
+const socioLector = biblioteca.registrarSocio(101, "Carlos", "Silva");
 
-// Simulación de un préstamo
-console.log("\n--- Préstamo ---");
-biblioteca.prestarLibro("1234567890", "19224"); // Enzo toma "1984"
+// 4. Probar la funcionalidad completa
 
-// Intentar prestar el mismo libro a otro socio (debe reservarlo)
-console.log("\n--- Intento de Préstamo con Reserva ---");
-biblioteca.prestarLibro("1234567890", "29384"); // Ana intenta tomar "1984"
-biblioteca.prestarLibro("1234567890", "38475"); // Luis intenta tomar "1984"
+console.log("--- Prueba de Préstamos y Multas ---");
+try {
+  socio1.retirar(libro1, -5); // Préstamo que generará multa
+  biblioteca.devolverLibro(socio1.id, libro1.isbn); // Devolución con multa
+  console.log(`Deuda de ${socio1.nombreCompleto}: $${socio1.deuda}`);
+  
+  biblioteca.retirarLibro(socio1.id, libro2.isbn); // Intento de préstamo con deuda
+} catch (error: any) {
+  console.log(`❌ Error: ${error.message}`);
+}
+socio1.saldarDeuda();
+biblioteca.retirarLibro(socio1.id, libro2.isbn); // Préstamo exitoso tras saldar deuda
 
-// Simulación de una devolución
-console.log("\n--- Devolución ---");
-biblioteca.devolverLibro("1234567890", "19224"); // Enzo devuelve "1984"
+console.log("\n--- Prueba de Reservas y Notificaciones ---");
+try {
+  biblioteca.retirarLibro(socio2.id, libro3.isbn);
+  biblioteca.reservarLibro(socio1.id, libro3.isbn);
+  biblioteca.devolverLibro(socio2.id, libro3.isbn);
+} catch (error: any) {
+  console.log(`❌ Error: ${error.message}`);
+}
+
+console.log("\n--- Prueba de Historial y Recomendaciones ---");
+// Simular la lectura de libros de Tolkien
+socioLector.retirar(libro3, 10);
+socioLector.devolver(libro3);
+
+const recomendaciones = biblioteca.sugerirLibros(socioLector.id);
+if (recomendaciones.length > 0) {
+  console.log(`✨ Recomendaciones para ${socioLector.nombreCompleto}:`);
+  recomendaciones.forEach(libro => {
+    console.log(`- "${libro.titulo}" de ${libro.autor.nombre}`);
+  });
+} else {
+  console.log("No se encontraron recomendaciones.");
+}
