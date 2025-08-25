@@ -1,4 +1,3 @@
-// Archivo: Prestamo.ts
 import { Libro } from "./Libro";
 
 /**
